@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{template :: head}">
+    <meta charset="UTF-8">
+    <title>Abogados</title>
+</head>
+<body>
+
+<header th:replace="~{template :: header}"></header>
+
+<div class="container">
+    <h1 th:text="${titulo}"></h1>
+
+    <form th:action="@{/views/casos/save}" th:object="${caso}" method="POST">
+        <div class="row mb-3">
+            <input th:field="*{numeroCaso}" type="hidden">
+            <label for="rut" class="col-sm-2 col-form-label">RUT</label>
+            <div class="col-sm-3">
+                <input th:field="*{rutNumero}" type="number" class="form-control" id="rut">
+            </div>
+            <div class="col-sm-1">
+                <input th:field="*{rutDv}" class="form-control" id="dv">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-4">
+                <input th:field="*{nombre}" class="form-control" id="nombre">
+            </div>
+            <label for="apellido" class="col-sm-2 col-form-label float-start">Apellido</label>
+            <div class="col-sm-4 float-start">
+                <input th:field="*{apellido}" class="form-control" id="apellido">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="direccion" class="col-sm-2 col-form-label">Direcci&oacute;n</label>
+            <div class="col-sm-10">
+                <input th:field="*{direccion}" class="form-control" id="direccion">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="email" class="col-sm-2 col-form-label">Correo electr&oacute;nico</label>
+            <div class="col-sm-10">
+                <input th:field="*{correoElectronico}" type="email" class="form-control" id="email">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="telefono" class="col-sm-2 col-form-label">Tel&eacute;fono</label>
+            <div class="col-sm-10">
+                <input th:field="*{telefono}" type="text" class="form-control" id="telefono">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="descCaso" class="col-sm-2 col-form-label">Descripci&oacute;n caso</label>
+            <div class="col-sm-10">
+                <textarea th:field="*{descripcionCaso}" class="form-control" id="descCaso"></textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="fchInicioCaso" class="col-sm-2 col-form-label">Fecha inicio caso</label>
+            <div class="col-sm-10">
+                <input th:field="*{fechaInicioCaso}" class="form-control" id="fchInicioCaso">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="fchCierreCaso" class="col-sm-2 col-form-label">Fecha cierre caso</label>
+            <div class="col-sm-10">
+                <input th:field="*{fechaCierreCaso}" class="form-control" id="fchCierreCaso">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="estadoCaso" class="col-sm-2 col-form-label">Estado caso</label>
+            <div class="col-sm-10">
+                <select th:field="*{estadoCaso}" class="form-select" aria-label="Default select example" id="estadoCaso">
+                    <option selected value="">Seleccionar estado</option>
+                    <option value="ACTIVO">Activo</option>
+                    <option value="EN_PROCESO">En proceso</option>
+                    <option value="CERRADO">Cerrado</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="descSentencia" class="col-sm-2 col-form-label">Descripci&oacute;n sentencia</label>
+            <div class="col-sm-10">
+                <textarea th:field="*{descripcionSentencia}" class="form-control" id="descSentencia"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+<footer th:replace="~{template :: footer}"></footer>
+</body>
+<script>
+
+    let es = {
+        days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        daysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+        daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        today: 'Hoy',
+        clear: 'Limpiar',
+        dateFormat: 'dd-MM-yyyy',
+        timeFormat: 'hh:mm aa',
+        firstDay: 1
+    }
+
+    let dpInicioCaso = new AirDatepicker('#fchInicioCaso', {
+        locale: es,
+        onSelect() {
+            dpInicioCaso.hide();
+        }
+    });
+
+    let dpCierreCaso = new AirDatepicker('#fchCierreCaso', {
+        locale: es,
+        onSelect() {
+            dpCierreCaso.hide();
+        }
+    });
+
+    function formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\\D/g, '');
+        console.log(cleaned)
+        var match = cleaned.match(/^\\+(\\d{2})(\\d{9})$/);
+        console.log(match)
+        if (match) {
+            return '+' + match[1] + ' ' + match[2];
+        }
+        return phoneNumberString;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let telefono = document.getElementById('telefono');
+        telefono.value = formatPhoneNumber(telefono.value);
+    });
+
+    telefono.addEventListener("blur", function(e) {
+        console.log(e);
+        telefono.value = formatPhoneNumber(telefono.value);
+    });
+
+</script>
+</html>

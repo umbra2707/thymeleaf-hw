@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{template :: head}">
+    <meta charset="UTF-8">
+    <title>Abogados</title>
+</head>
+<body>
+
+<header th:replace="~{template :: header}"></header>
+
+<div class="container">
+    <h1 th:text="${titulo}"></h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col"># caso</th>
+                <th scope="col">RUT</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Correo electrónico</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Fecha inicio</th>
+                <th scope="col">Estado caso</th>
+                <th scope="col">Fecha cierre</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="caso : ${casos}">
+                <td th:text="${caso.numeroCaso}"></td>
+                <td th:text="${caso.rutNumero + '-' + caso.rutDv}"></td>
+                <td th:text="${caso.nombre + ' ' + caso.apellido}"></td>
+                <td th:text="${caso.direccion}"></td>
+                <td th:text="${caso.correoElectronico}"></td>
+                <td th:text="${caso.telefono}"></td>
+                <td th:text="${#dates.format(caso.fechaInicioCaso, 'dd/MM/yyyy')}"></td>
+                <td th:text="${caso.estadoCaso}"></td>
+                <td th:text="${caso.fechaCierreCaso != null ? #dates.format(caso.fechaCierreCaso, 'dd/MM/yyyy') : ''}"></td>
+                <td><a class="btn btn-success" th:href="@{/views/casos/edit/}+${caso.numeroCaso}"><i class="bi bi-pencil"></i></a></td>
+                <td><a class="btn btn-danger" th:href="@{/views/casos/delete/}+${caso.numeroCaso}"><i class="bi bi-trash"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{template :: footer}"></footer>
+</body>
+</html>
